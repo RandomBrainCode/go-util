@@ -5,6 +5,7 @@ go 1.23.1
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.16.0
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.2.2
+	github.com/joho/godotenv v1.5.1
 	github.com/microsoftgraph/msgraph-sdk-go v1.51.0
 	github.com/microsoftgraph/msgraph-sdk-go-core v1.2.1
 )
