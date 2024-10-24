@@ -8,14 +8,6 @@ import (
 	"time"
 )
 
-type Session interface {
-	Logoff() error
-}
-
-type Share interface {
-	Umount() error
-}
-
 type Samba struct {
 	ServerName    string
 	UserName      string
@@ -26,6 +18,23 @@ type Samba struct {
 	NetConnection func(serverName string) (net.Conn, error)
 	SambaDialer   func(userName, password string) *smb2.Dialer
 	SambaSession  func(conn net.Conn, dialer *smb2.Dialer) (*smb2.Session, error)
+}
+
+func DefaultNetConnection(serverName string) (net.Conn, error) {
+	return net.DialTimeout("tcp", serverName, 30*time.Second)
+}
+
+func DefaultSambaDialer(userName, password string) *smb2.Dialer {
+	return &smb2.Dialer{
+		Initiator: &smb2.NTLMInitiator{
+			User:     userName,
+			Password: password,
+		},
+	}
+}
+
+func DefaultSambaSession(conn net.Conn, dialer *smb2.Dialer) (*smb2.Session, error) {
+	return dialer.Dial(conn)
 }
 
 func (s *Samba) Connect() error {
@@ -121,4 +130,16 @@ func NewSession(conn *net.Conn, dialer *smb2.Dialer) (*smb2.Session, error) {
 		return nil, err
 	}
 	return session, nil
+}
+
+func NewSamba(serverName, userName, password, shareName string) *Samba {
+	return &Samba{
+		ServerName:    serverName,
+		UserName:      userName,
+		Password:      password,
+		ShareName:     shareName,
+		NetConnection: DefaultNetConnection,
+		SambaDialer:   DefaultSambaDialer,
+		SambaSession:  DefaultSambaSession,
+	}
 }
