@@ -1,4 +1,4 @@
-package ms_client_auth
+package auth
 
 import (
 	"context"

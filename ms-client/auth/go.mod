@@ -1,4 +1,4 @@
-module ms-client-auth
+module auth
 
 go 1.23.1
 
