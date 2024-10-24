@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/joho/godotenv"
-	msgraph "github.com/microsoftgraph/msgraph-sdk-go"
 	"net/http"
 	"os"
 	"testing"
