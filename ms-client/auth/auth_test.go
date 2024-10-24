@@ -17,7 +17,7 @@ func TestLogin(t *testing.T) {
 		panic(err)
 	}
 
-	params := AuthParams{
+	params := Params{
 		clientID:     os.Getenv("CLIENT_ID"),
 		clientSecret: os.Getenv("CLIENT_SECRET"),
 		tenantID:     os.Getenv("TENANT_ID"),
@@ -82,13 +82,13 @@ func TestLogin(t *testing.T) {
 			return
 		}
 
-		adapter, err := msgraph.NewGraphRequestAdapter(provider)
+		adapter, err := GetGraphAdapter(provider)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		graphClient := msgraph.NewGraphServiceClient(adapter)
+		graphClient := GetGraphClient(adapter)
 		user, err := graphClient.Me().Get(context.TODO(), nil)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type AuthParams struct {
+type Params struct {
 	clientID     string
 	clientSecret string
 	tenantID     string
@@ -23,7 +23,7 @@ type TokenCredential struct {
 	accessToken string
 }
 
-func (c *TokenCredential) GetToken(ctx context.Context, options policy.TokenRequestOptions) (azcore.AccessToken, error) {
+func (c *TokenCredential) GetToken(_ context.Context, _ policy.TokenRequestOptions) (azcore.AccessToken, error) {
 	return azcore.AccessToken{Token: c.accessToken, ExpiresOn: time.Now().Add(1 * time.Hour)}, nil
 }
 
