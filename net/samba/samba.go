@@ -40,9 +40,6 @@ func DefaultSambaSession(conn net.Conn, dialer *smb2.Dialer) (*smb2.Session, err
 }
 
 func (s *Samba) Server() string {
-	if s.Port == 0 {
-		return s.Host
-	}
 	return s.Host + ":" + strconv.Itoa(int(s.Port))
 }
 
