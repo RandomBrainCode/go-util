@@ -5,11 +5,13 @@ import (
 	"io"
 	"net"
 	"os"
+	"strconv"
 	"time"
 )
 
 type Samba struct {
-	ServerName    string
+	Host          string
+	Port          uint16
 	UserName      string
 	Password      string
 	ShareName     string
@@ -37,8 +39,15 @@ func DefaultSambaSession(conn net.Conn, dialer *smb2.Dialer) (*smb2.Session, err
 	return dialer.Dial(conn)
 }
 
+func (s *Samba) Server() string {
+	if s.Port == 0 {
+		return s.Host
+	}
+	return s.Host + ":" + strconv.Itoa(int(s.Port))
+}
+
 func (s *Samba) Connect() error {
-	conn, err := NewTCPConnection(s.ServerName)
+	conn, err := NewTCPConnection(s.Server())
 	if err != nil {
 		return err
 	}
@@ -132,9 +141,10 @@ func NewSession(conn *net.Conn, dialer *smb2.Dialer) (*smb2.Session, error) {
 	return session, nil
 }
 
-func NewSamba(serverName, userName, password, shareName string) *Samba {
+func NewSamba(host, userName, password, shareName string, port uint16) *Samba {
 	return &Samba{
-		ServerName:    serverName,
+		Host:          host,
+		Port:          port,
 		UserName:      userName,
 		Password:      password,
 		ShareName:     shareName,
