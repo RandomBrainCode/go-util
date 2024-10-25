@@ -1,4 +1,4 @@
-module samba
+module github.com/RandomBrainCode/go-util/net/samba
 
 go 1.23.1
 
